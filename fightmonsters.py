@@ -9,7 +9,7 @@ dexterity = random.randint(0,3)
 constitution = random.randint(0,3)
 hitpoints = random.randint(5,10) + constitution
 
-print ("Here are your stats:")
+print ("Here are your stat modifiers:")
 sleep(1)
 print ("Strength: " + str(strength))
 sleep(1)
@@ -68,4 +68,7 @@ while hitpoints > 0:
 	[hitpoints, goblinkills] = fightgoblin(hitpoints, goblinkills)
 	print ("You have killed " + str(goblinkills) + " goblins!")
 	sleep(1)
-print ("Sorry, you died! But you killed " + str(goblinkills) + "!\n so there's that...")
+if goblinkills > 0:
+	print ("Sorry, you died! But you killed " + str(goblinkills) + "!\n so there's that...")
+else:
+	print ("You got 0 kills and there is no justifing that!")
