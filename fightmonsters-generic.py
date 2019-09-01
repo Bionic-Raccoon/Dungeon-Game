@@ -1,7 +1,7 @@
 import random
 import time
 from time import sleep
-
+import string
 
 
 def statdescriptor(stat):
@@ -70,14 +70,6 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 			sleep(1)
 	return [hitpoints, kills, xp]
 
-def fightspider(hitpoints = 0, spiderkills = 0, xp = 0):
-	#put the spider fighting code in here
-	[hitpoints, spiderkills, xp] = fightmonster("giant spider", 15, 13, 40, 8, hitpoints, spiderkills, xp)
-	return [hitpoints, spiderkills, xp]
-
-def fightgoblin(hitpoints = 0, goblinkills=0, xp=0):
-	[hitpoints, goblinkills, xp] = fightmonster("goblin", 10, 12, 25, 6, hitpoints, goblinkills, xp)
-	return [hitpoints, goblinkills, xp]
 	
 # The program actually starts here!
 name = input("Welcome to the adventure!\nEnter your new character's name: ")
@@ -85,14 +77,27 @@ print ("Your new characters is named: " + name)
 sleep(1)
 
 # Easter egg
-if name == "Fodor":
-	print("Hello Dad!  You're not allowed to play my game!")
+if name.lower() == "alfonso pipethin":
+	print("Hello Dad!") 
+	sleep(1)
+	print("You are not allowed to play my game")
+	sleep(1)
+	print("HEHEHEHEHEHEHE")
+	sleep(1)
 	exit(0)
+
 	
 strength = random.randint(0,3)
 dexterity = random.randint(0,3)
 constitution = random.randint(0,3)
 hitpoints = random.randint(5,10) + constitution
+
+if name == "Claire":
+	strength = 3
+	dexterity = 3
+	constitution = 3
+	hitpoints = 100
+	
 
 print ("Here are your stats:")
 sleep(1)
@@ -103,41 +108,74 @@ sleep(1)
 print ("Constitution: " + statdescriptor(constitution) + " tough")
 sleep(1)
 print ("Hit Points: " + str(hitpoints))
+maxhitpoints = hitpoints
 sleep(1)
-goblinkills = 0
-spiderkills = 0
+kills = 0
 xp = 0
 turn = 1
+level = 1
 
 print ("\nYou enter the dungeon!")
-
+	
 while hitpoints > 0:
-	if turn > 1:
+	if turn == 1:
+		print ("This is the 1st turn")
+	elif turn == 2:
+		print ("This is the 2nd turn")
+	elif turn == 3:
+		print ("This is the 3rd turn")
+	else:
+		print ("This is the " + str(turn) + "th turn")	
+	if turn > 1 and (turn % 3) == 0:
+		############################Healing#################################
 		healme = input("Do you want to heal yourself? (y/n)")
 		if healme == 'y':
 			healpoints = random.randint(1,2)
 			hitpoints = hitpoints + healpoints
+			if hitpoints > maxhitpoints:
+				hitpoints = maxhitpoints
 			print("You healed yourself!  You now have " + str(hitpoints) + " hit points!")
-	
-	randmonster = random.randint(1,3)
-	if randmonster == 1:
+	print("\n\nYou have " + str(((level-1)*100) + xp) + " experience points!")
+	randmonster = random.randint(1,10)
+	if randmonster < 5:
 		sleep(1)
-		[hitpoints, goblinkills, xp] = fightgoblin(hitpoints, goblinkills, xp)
-		print ("You have killed " + str(goblinkills) + " goblins!")
+		[hitpoints, kills, xp] = fightmonster("goblin", 10, 12, 25, 6, hitpoints, kills, xp)
 		sleep(1)
-	elif randmonster == 2:
+	elif randmonster > 4 and randmonster < 7:
 		sleep(1)
-		[hitpoints, spiderkills, xp] = fightspider(hitpoints, spiderkills, xp)
-		print ("You have killed " + str(spiderkills) + " spiders!")
+		[hitpoints, kills, xp] = fightmonster("giant spider", 15, 13, 40, 8, hitpoints, kills, xp)
+		sleep(1)
+	elif randmonster == 7:
+		sleep(1)
+		[hitpoints, kills, xp] = fightmonster("ogre", 20, 14, 50, 12, hitpoints, kills, xp)
+		sleep(1)
+	elif randmonster == 8:
+		sleep(1)
+		[hitpoints, kills, xp] = fightmonster("a GIANT", 40, 15, 90, 16, hitpoints, kills, xp)
 		sleep(1)
 	else:
 		print ("You wander the dungeon for a while...")
 		sleep(1)
+	
+	print ("You have killed " + str(kills) + " monsters!")
 	turn = turn + 1
 	
-print ("Sorry, you died! But you killed " + str(goblinkills) + " goblins!")
+	if xp > 100:
+		# Level up
+		print("You gained a level!  You are now level " + str(level+1))
+		print("You can increase one of your abilities!")
+		choice = input("Which do you want to increase? (str/dex/con)")
+		if choice == "str":
+			strength = strength + 1
+		elif choice == "dex":
+			dexterity = dexterity + 1
+		elif "con":
+			constitution = constitution + 1
+		print ("Your hit points increase!")
+		hp = hp + random.randint(1-6) + constitution
+		xp = xp - 100
+	
+print ("Sorry, you died! But you killed " + str(kills) + " monsters!")
 sleep(1)
-print ("You also killed " + str(spiderkills) + " spiders.")
-sleep(1)
-print ("You survived " + str(turn) + " encounters!")
+print ("You survived " + str(turn) + " turns!")
 print ("\n so there's that...")
