@@ -3,6 +3,27 @@ import time
 from time import sleep
 import string
 
+#Shopping Function
+def shopping(gold=0, arms=0, armors=0):
+	wanttoshop = "x"
+	while wanttoshop not in ["y","n"]:
+		wanttoshop = input("Do you want to buy better arms or armor? (y/n) ")
+	if wanttoshop == 'y':
+		#Shop
+		whattobuy = "0"
+		while whattobuy not in ["1", "2"]:
+			whattobuy = input("Enter 1 to buy weapons, 2 to buy better armor:")
+		if wanttobuy == "1":
+			if (gold > 49):
+				print ("You buy better weapons!")
+				arms = arms + 1
+				gold = gold - 50
+		if wanttobuy == "2":
+			if (gold > 49):
+				print ("You buy better armor!")
+				armor = armor + 1
+				gold = gold - 50
+	return [gold, arms, armors]
 
 def statdescriptor(stat):
 	""" This is just a function to return 'friendly' names for stats"""
@@ -31,10 +52,21 @@ def showstats():
 	print ("Constitution: " + statdescriptor(constitution) + " tough")
 	print ("Hit Points: " + str(hitpoints) + " (of " + str(maxhitpoints) + ")")
 	print ("Armor Class: " + str(armorclass))
+	print ("Gold: " + str(totalgold))
 	print ("====================\n")
 	sleep(3)
 
-def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monsterdamage=1, monsterhitbonus = 0, monsterdamagebonus = 0, hitpoints=0, kills=0, xp=0):
+def fightmonster(monster="", 
+				monstermaxhp=1, 
+				monsterac = 10, 
+				monsterxp=0, 
+				monsterdamage=1, 
+				monsterhitbonus = 0, 
+				monsterdamagebonus = 0, 
+				hitpoints=0, 
+				kills=0, 
+				xp=0, 
+				gp=0):
 	""" This is the main fighting part of the program """
 	showstats()
 	monsterhp = random.randint(1,monstermaxhp)
@@ -56,7 +88,7 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 				doubledamage = True
 				print ("\n***Critical hit!!!***\n")
 				sleep(2)
-			tohit = tohit + strength
+			tohit = tohit + strength + arms
 			print (name + " rolls a " + str(tohit) + "!!!!")
 			if tohit == 1:
 				print("Really!?!  A ONE!!!")
@@ -65,7 +97,7 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 			if tohit > monsterac:
 				print (name + " hits the " + monster + "!")
 				sleep(1)
-				damage = random.randint(1,12) + strength
+				damage = random.randint(1,12) + strength + arms
 				if doubledamage:
 					damage = damage * 2
 					doubledamage = False
@@ -75,6 +107,8 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 					sleep(1)
 					kills = kills + 1
 					xp = xp + monsterxp
+					gp = gp + (monsterxp/2)
+					print (name + " finds " + str(monsterxp/2) + " gold pieces!")
 					break
 				else:
 					print(name + " hits for " + str(damage) + ", the " + monster + ", it has " + str(monsterhp) + " hit points left")
@@ -88,7 +122,7 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 			escape = random.randint(1,10) + dexterity
 			if escape > 5:
 				print (name + " gets away!")
-				return [hitpoints, kills, xp]
+				return [hitpoints, kills, xp, gp]
 			else:
 				print("The " + monster + " is too fast, " + name + " can't get away!")
 		print ("The " + monster + " tries to smite " + name + "!")
@@ -103,7 +137,7 @@ def fightmonster(monster="", monstermaxhp=1, monsterac = 10, monsterxp=0, monste
 		else:
 			print ("The " + monster + " misses " + name + "!")
 			sleep(1)
-	return [hitpoints, kills, xp]
+	return [hitpoints, kills, xp, gp]
 	
 keepplaying = True
 while (keepplaying):	
@@ -122,7 +156,7 @@ while (keepplaying):
 		sleep(1)
 		exit(0)
 
-	# Determine the character's stats
+	# Determine the character's starting stats
 	strength = random.randint(0,3)
 	dexterity = random.randint(0,3)
 	constitution = random.randint(0,3)
@@ -133,6 +167,10 @@ while (keepplaying):
 	xp = 0
 	turn = 1
 	level = 1
+	gold = 0
+	totalgold = 0
+	arms = 0
+	armor = 0
 
 	# Test and debug names
 	if name == "Claire":
@@ -142,6 +180,7 @@ while (keepplaying):
 			dexterity = 5
 			constitution = 5
 			hitpoints = 100
+			maxhitpoints = 100
 		else:
 			print("Nice try sucka!  You get a normal character....")
 			sleep(2)
@@ -191,24 +230,25 @@ while (keepplaying):
 				sleep(3)
 		print("\n\n" + name +  " has " + str(((level-1)*100) + xp) + " experience points!")
 		print("(need 100 for next level)")
+		
 		randmonster = random.randint(1,11)
 		# Low level monsters
 		if level < 4:
 			if randmonster < 5:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("goblin", 6, 12, 25, 6, -1, -1, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("goblin", 6, 12, 25, 6, -1, -1, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster > 4 and randmonster < 7:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("giant spider", 15, 13, 40, 8, 1, 1, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("giant spider", 15, 13, 40, 8, 1, 1, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster == 7:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("ogre", 20, 14, 50, 12, 3, 3, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("ogre", 20, 14, 50, 12, 3, 3, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster ==8:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("hill giant", 40, 15, 90, 16, 5, 5, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("hill giant", 40, 15, 90, 16, 5, 5, hitpoints, kills, xp)
 				sleep(3)
 			else:
 				print ("\n" + name + " wanders the dungeon for a while...\n")
@@ -217,29 +257,35 @@ while (keepplaying):
 		else:
 			if randmonster < 5:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("ogre", 20, 14, 20, 12, 3, 3, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("ogre", 20, 14, 20, 12, 3, 3, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster > 4 and randmonster < 7:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("troll", 25, 16, 30, 16, 1, 1, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("troll", 25, 16, 30, 16, 1, 1, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster == 7:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("fire giant", 40, 15, 40, 16, 5, 5, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("fire giant", 40, 15, 40, 16, 5, 5, hitpoints, kills, xp)
 				sleep(1)
 			elif randmonster ==8:
 				sleep(1)
-				[hitpoints, kills, xp] = fightmonster("Dragon", 60, 18, 90, 18, 8, 8, hitpoints, kills, xp)
+				[hitpoints, kills, xp, gold] = fightmonster("Dragon", 60, 18, 90, 18, 8, 8, hitpoints, kills, xp)
 				sleep(1)
 			else:
 				print ("\n" + name + " wanders the dungeon for a while...\n")
 				sleep(3)
-			
+		totalgold = totalgold + gold
+		gold = 0	
 			
 		print (name + " has killed " + str(kills) + " monsters!")
 		turn = turn + 1
 		
-		if xp > 100:
+		if totalgold > 49:
+			[totalgold, arms, armor] = shopping(totalgold, arms, armor)
+			armorclass = armorclass + armor
+			armor = 0
+			
+		if xp > 99:
 			# Level up
 			level = level + 1
 			print("\n--------------")
