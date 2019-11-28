@@ -1,7 +1,19 @@
 import random
 import time
 from time import sleep
+from os import system, name as sysname
 import string
+
+# define our clear function 
+def clear(): 
+  
+    # for windows 
+    if sysname == 'nt': 
+        _ = system('cls') 
+  
+    # for mac and linux(here, os.name is 'posix') 
+    else: 
+        _ = system('clear') 
 
 #Shopping Function
 def shopping(gold=0, arms=0, armors=0):
@@ -43,7 +55,17 @@ def statdescriptor(stat):
 		return "the opposite of"
 		
 def showstats():
+	print("print statblock")
 	""" This function prints out the character's stat blocks """
+	# for windows 
+	print(sysname)
+	if sysname == 'nt': 
+		_ = system('cls') 
+  
+    # for mac and linux(here, os.name is 'posix') 
+	else: 
+		_ = system('clear')
+
 	print ("")
 	print ("====================")
 	print ("Name: " + name)#4FCAA3
@@ -139,8 +161,10 @@ def fightmonster(monster="",
 			sleep(1)
 	return [hitpoints, kills, xp, gp]
 	
+
 keepplaying = True
 while (keepplaying):	
+	clear()
 	# The program actually starts here!
 	name = input("Welcome to the adventure!\nEnter your new character's name: ")
 	print ("Your new characters is named: " + name)
@@ -151,9 +175,9 @@ while (keepplaying):
 		print("Hello Dad!") 
 		sleep(1)
 		print("You are not allowed to play my game")
-		sleep(1)
+		sleep(3)
 		print("HEHEHEHEHEHEHE")
-		sleep(1)
+		sleep(3)
 		exit(0)
 
 	# Determine the character's starting stats
@@ -199,7 +223,8 @@ while (keepplaying):
 	sleep(1)
 
 	print ("\n" + name + " enters the dungeon!")
-		
+	sleep(2)
+
 	while hitpoints > 0:
 		if turn == 1:
 			print ("This is the 1st turn")
@@ -228,8 +253,10 @@ while (keepplaying):
 				hitpoints = maxhitpoints
 				print( name + " now has " + str(hitpoints) + " (of " + str(maxhitpoints) + ")")
 				sleep(3)
+		showstats()
 		print("\n\n" + name +  " has " + str(((level-1)*100) + xp) + " experience points!")
 		print("(need 100 for next level)")
+		sleep(3)
 		
 		randmonster = random.randint(1,11)
 		# Low level monsters
@@ -276,9 +303,11 @@ while (keepplaying):
 				sleep(3)
 		totalgold = totalgold + gold
 		gold = 0	
-			
+
+		showstats()
 		print (name + " has killed " + str(kills) + " monsters!")
 		turn = turn + 1
+		sleep(3)
 		
 		if totalgold > 49:
 			[totalgold, arms, armor] = shopping(totalgold, arms, armor)
