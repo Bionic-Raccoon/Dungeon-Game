@@ -25,12 +25,12 @@ def shopping(gold=0, arms=0, armors=0):
 		whattobuy = "0"
 		while whattobuy not in ["1", "2"]:
 			whattobuy = input("Enter 1 to buy weapons, 2 to buy better armor:")
-		if wanttobuy == "1":
+		if whattobuy == "1":
 			if (gold > 49):
 				print ("You buy better weapons!")
 				arms = arms + 1
 				gold = gold - 50
-		if wanttobuy == "2":
+		if whattobuy == "2":
 			if (gold > 49):
 				print ("You buy better armor!")
 				armor = armor + 1
@@ -69,12 +69,15 @@ def showstats():
 	print ("")
 	print ("====================")
 	print ("Name: " + name)#4FCAA3
+	print ("Level: " + str(level))
 	print ("Strength: " + statdescriptor(strength) + " strong")
 	print ("Dexterity: " + statdescriptor(dexterity) + " dextrous")
 	print ("Constitution: " + statdescriptor(constitution) + " tough")
 	print ("Hit Points: " + str(hitpoints) + " (of " + str(maxhitpoints) + ")")
 	print ("Armor Class: " + str(armorclass))
+	print ("Arms: " + str(arms))
 	print ("Gold: " + str(totalgold))
+	print ("XP: " + str(xp) + " (100 for next level)")
 	print ("====================\n")
 	sleep(3)
 
@@ -234,6 +237,7 @@ while (keepplaying):
 			print ("This is the 3rd turn")
 		else:
 			print ("This is the " + str(turn) + "th turn")	
+		sleep(3)
 		if turn > 1 and (turn % 3) == 0:
 			############################Healing#################################
 			healme = "x"
